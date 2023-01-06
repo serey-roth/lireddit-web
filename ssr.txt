@@ -1,0 +1,9 @@
+me -> browse https://localhost:3000
+-> next.js server
+-> request graphql server localhost:4040
+-> building the HTML
+-> sending back to your browser
+
+only server-side render page on initial load time
+after that, client-sider render the page 
+if you hit the back button, load the query from the browser (no more ssr)
