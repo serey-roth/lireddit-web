@@ -16,8 +16,8 @@ export type Scalars = {
 
 export type FieldError = {
   __typename?: 'FieldError';
-  field?: Maybe<Scalars['String']>;
-  message?: Maybe<Scalars['String']>;
+  field: Scalars['String'];
+  message: Scalars['String'];
 };
 
 export type Mutation = {
@@ -61,7 +61,7 @@ export type MutationLoginArgs = {
 
 
 export type MutationRegisterArgs = {
-  options?: InputMaybe<UsernamePasswordInput>;
+  options: UsernamePasswordInput;
 };
 
 
@@ -104,7 +104,7 @@ export type User = {
   email: Scalars['String'];
   id: Scalars['Int'];
   password: Scalars['String'];
-  posts: Array<Maybe<Post>>;
+  posts?: Maybe<Array<Post>>;
   updatedAt: Scalars['Int'];
   username: Scalars['String'];
 };
@@ -121,7 +121,7 @@ export type UsernamePasswordInput = {
   username: Scalars['String'];
 };
 
-export type RegularErrorFragment = { __typename?: 'FieldError', field?: string | null, message?: string | null } & { ' $fragmentName'?: 'RegularErrorFragment' };
+export type RegularErrorFragment = { __typename?: 'FieldError', field: string, message: string } & { ' $fragmentName'?: 'RegularErrorFragment' };
 
 export type RegularUserFragment = { __typename?: 'User', id: number, username: string } & { ' $fragmentName'?: 'RegularUserFragment' };
 
