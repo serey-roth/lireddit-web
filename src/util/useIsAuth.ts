@@ -9,7 +9,7 @@ export default function useIsAuth() {
 
     useEffect(() => {
         if (!fetching && !data?.me) {
-            router.replace('/login');
+            router.replace('/login?next=' + router.pathname); //add current pathname to query so that login page can redirect user back to that page
         }
     }, [data, fetching, router]);
 
