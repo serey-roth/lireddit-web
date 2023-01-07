@@ -4,13 +4,13 @@ import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { useMutation } from 'urql';
 import InputField from '../components/InputField';
 import Wrapper from '../components/Wrapper';
-import { ForgotPasswordDocument } from '../gql/graphql';
+import { ForgetPasswordDocument } from '../gql/graphql';
 
 type Input = { email: string };
 
-const ForgotPassword: React.FC<{}> = ({ }) => {
+const ForgetPassword: React.FC<{}> = ({ }) => {
     const methods = useForm<Input>();
-    const [, forgotPassword] = useMutation(ForgotPasswordDocument);
+    const [, forgotPassword] = useMutation(ForgetPasswordDocument);
     const [complete, setComplete] = useState(false);
 
     const onSubmit: SubmitHandler<Input> = async (values) => {
@@ -43,4 +43,4 @@ const ForgotPassword: React.FC<{}> = ({ }) => {
     );
 }
 
-export default ForgotPassword;
+export default ForgetPassword;

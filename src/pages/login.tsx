@@ -57,7 +57,7 @@ const Login: React.FC<loginProps> = ({}) => {
                             minLength={6}/>
                     </Box>
                     <Flex mt={2}>
-                    <Link as={NextLink} href='/forgot-password' ml='auto'>forgot password?</Link>
+                    <Link as={NextLink} href='/forget-password' ml='auto'>forgot password?</Link>
                     </Flex>
                     <Button 
                         mt={4} 
