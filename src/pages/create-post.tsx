@@ -1,12 +1,12 @@
 import { Button, Box } from '@chakra-ui/react';
 import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import { useMutation } from 'urql';
+import { useMutation, useQuery } from 'urql';
 import InputField from '../components/InputField';
 import Layout from '../components/Layout';
-import { CreatePostDocument } from '../gql/graphql';
+import { CreatePostDocument, MeDocument } from '../gql/graphql';
 import { createUrqlClient } from '../util/createUrqlClient';
 
 type Inputs = {
@@ -15,7 +15,15 @@ type Inputs = {
 }
 
 const CreatePost: React.FC<{}> = ({}) => {
+    const [{ data, fetching }] = useQuery({ query: MeDocument });
     const router = useRouter();
+
+    useEffect(() => {
+        if (!fetching && !data?.me) {
+            router.replace('/login');
+        }
+    }, [data, fetching, router]);
+
     const [, createPost] = useMutation(CreatePostDocument);
     const methods = useForm<Inputs>();
 
