@@ -11,7 +11,7 @@ const Index = () => {
             <Navbar />
             Hello world
             <br />
-            { !data ? null : data.posts.map(post => <div key={post.id}>{post.title}</div>)}
+            { !data?.posts ? null : data.posts.map(post => <div key={post.id}>{post.title}</div>)}
         </div>
     )
 }
