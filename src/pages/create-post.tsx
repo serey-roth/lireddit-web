@@ -20,8 +20,10 @@ const CreatePost: React.FC<{}> = ({}) => {
     const methods = useForm<Inputs>();
 
     const onSubmit: SubmitHandler<Inputs> = async (values) => {
-        const response = await createPost({ input: values });
-        console.log(response)
+        const { error } = await createPost({ input: values });
+        if (!error) {
+            router.push('/');
+        }
     }
 
     return (
