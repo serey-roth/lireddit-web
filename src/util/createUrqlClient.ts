@@ -1,7 +1,22 @@
-import { dedupExchange, fetchExchange } from "urql";
 import { cacheExchange } from "@urql/exchange-graphcache";
-import { LogoutMutation, MeQuery, MeDocument, LoginMutation, RegisterMutation, RegularUserResponseFragment } from "../gql/graphql";
+import { dedupExchange, Exchange, fetchExchange } from "urql";
+import { pipe, tap } from "wonka";
+import { LoginMutation, LogoutMutation, MeDocument, MeQuery, RegisterMutation, RegularUserResponseFragment } from "../gql/graphql";
 import { betterUpdateQuery } from "./betterUpdateQuery";
+import Router from "next/router";
+
+export const errorExchange: Exchange = ({ forward }) => ops$ => {
+    return pipe(
+        forward(ops$),
+        tap(({ error }) => {
+            // If the OperationResult has an error
+            // the error is a CombinedError with networkError and graphqlErrors properties
+            if (error?.message.includes('not authenticated')) {
+                Router.replace('/login');
+            } 
+        })
+    );
+  };
 
 // create urql client with next-urql for optional server rendering of select pages
 export const createUrqlClient = (ssrExchange: any) => ({
@@ -54,6 +69,7 @@ export const createUrqlClient = (ssrExchange: any) => ({
             }
         }
     }), 
+    errorExchange,
     ssrExchange,
     fetchExchange],
 });
