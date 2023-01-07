@@ -45,15 +45,13 @@ const Register: React.FC<registerProps> = ({}) => {
                         label='Username'
                         name='username'
                         type='text'
-                        placeholder='Enter username'
-                        minLength={4}/>
+                        placeholder='Enter username'/>
                     <Box mt={4}>
                         <InputField 
                             label='Email'
                             name='email'
                             type='email'
-                            placeholder='Enter email'
-                            minLength={6}/>
+                            placeholder='Enter email'/>
                     </Box>
                     <Box mt={4}>
                         <InputField 
