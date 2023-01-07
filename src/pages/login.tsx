@@ -34,7 +34,11 @@ const Login: React.FC<loginProps> = ({}) => {
                 { shouldFocus: true });
             });
         } else if (loginResponse?.user) {
-            router.push('/'); //client-side navigation to home page
+            if (typeof router.query.next === 'string') {
+                router.push(router.query.next); //when previous page is not homepage like create-post page
+            } else {
+                router.push("/"); //client-side navigation to home page
+            }
         }
     }
 
@@ -46,15 +50,13 @@ const Login: React.FC<loginProps> = ({}) => {
                         label='Username/Email'
                         name='usernameOrEmail'
                         type='text'
-                        placeholder='Enter username or email'
-                        minLength={4}/>
+                        placeholder='Enter username or email'/>
                     <Box mt={4}>
                         <InputField 
                             label='Password'
                             name='password'
                             type='password'
-                            placeholder='Enter password'
-                            minLength={6}/>
+                            placeholder='Enter password'/>
                     </Box>
                     <Flex mt={2}>
                     <Link as={NextLink} href='/forget-password' ml='auto'>forgot password?</Link>
