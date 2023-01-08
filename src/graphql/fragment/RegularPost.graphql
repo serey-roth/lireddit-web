@@ -6,4 +6,5 @@ fragment RegularPost on Post {
     text
     points
     creatorId
+    textSnippet
 }
