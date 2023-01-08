@@ -25,7 +25,7 @@ const Index = () => {
         if (data && data.posts) {
             setVariables({
                 limit: variables.limit,
-                cursor: (data.posts[data.posts.length - 1] as RegularPostFragment).createdAt
+                cursor: (data.posts.posts[data.posts.posts.length - 1] as RegularPostFragment).createdAt
             });
         }
     }
@@ -40,7 +40,7 @@ const Index = () => {
             {!data && fetching ? 
                 (<div>Loading posts...</div>) : 
                 (<Stack spacing={8} direction='column'>
-                    {data?.posts?.map(post => {
+                    {data?.posts?.posts.map(post => {
                         const actualPost = post as RegularPostFragment;
                         return (
                             <Box key={actualPost.id} p={5} shadow='md' borderWidth='1px'>
@@ -51,7 +51,7 @@ const Index = () => {
                     })}
                 </Stack>)
             }
-            {data ? (
+            {data && data.posts?.hasMore ? (
                 <Flex>
                     <Button 
                     isLoading={fetching} 
