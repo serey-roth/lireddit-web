@@ -167,7 +167,18 @@ export const createUrqlClient = (ssrExchange: any) => ({
                             }
                         }
                     )
-                }
+                },
+                createPost: (_result, args, cache, info) => {
+                    const allFields = cache.inspectFields('Query');
+                    const fieldInfos = allFields.filter(info => info.fieldName === "posts");
+                    fieldInfos.forEach(fi => {
+                        //createPost add post to our database
+                        //then invalidate the first posts query in
+                        //the cache so that browser can refetch data from the
+                        //server
+                        cache.invalidate('Query', 'posts', fi.arguments);
+                    })
+                },
             }
         }
     }),
