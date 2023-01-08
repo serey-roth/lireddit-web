@@ -7,7 +7,12 @@ import { createUrqlClient } from "../util/createUrqlClient";
 import NextLink from "next/link";
 
 const Index = () => {
-    const [{ data }] = useQuery({ query: PostsDocument });
+    const [{ data }] = useQuery({ 
+        query: PostsDocument,
+        variables: {
+            limit: 10
+        }
+    });
     return (
         <Layout>
             <Link as={NextLink} href='/create-post'>Create post</Link>
