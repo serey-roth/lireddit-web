@@ -13,11 +13,12 @@ import NextLink from 'next/link';
 
 type Input = { newPassword: string };
 
-const ChangePassword: NextPage<{ token : string }> = ({ token }) => {
+const ChangePassword: NextPage<{}> = ({}) => {
     const router = useRouter();
     const [, changePassword] = useMutation(ChangePasswordDocument);
     const methods = useForm<Input>();
     
+    const token = typeof router.query.token === 'string' ? router.query.token : "";
     const [tokenError, setTokenError] = useState("");
 
     const onSubmit: SubmitHandler<Input> = async (values) => {
@@ -66,12 +67,6 @@ const ChangePassword: NextPage<{ token : string }> = ({ token }) => {
             </FormProvider>
         </Wrapper>
     );
-}
-
-ChangePassword.getInitialProps = ({ query }) => {
-    return { 
-        token: query.token as string
-    }
 }
 
 export default withUrqlClient(createUrqlClient)(ChangePassword);
