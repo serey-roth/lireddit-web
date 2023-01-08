@@ -1,4 +1,4 @@
-import { Box, Heading, Link, Stack, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, Link, Stack, Text } from "@chakra-ui/react";
 import { withUrqlClient } from "next-urql"
 import { useQuery } from "urql";
 import Layout from "../components/Layout";
@@ -7,29 +7,43 @@ import { createUrqlClient } from "../util/createUrqlClient";
 import NextLink from "next/link";
 
 const Index = () => {
-    const [{ data }] = useQuery({ 
+    const [{ data, fetching }] = useQuery({ 
         query: PostsDocument,
         variables: {
             limit: 10
         }
     });
+
+    if (!fetching && !data) {
+        return <div>query failed for some reason</div>
+    }
+
     return (
         <Layout>
-            <Link as={NextLink} href='/create-post'>Create post</Link>
+            <Flex alignItems='center'>
+                <Heading>LiReddit</Heading>
+                <Link as={NextLink} href='/create-post' ml="auto">Create post</Link>
+            </Flex>
             <br />
-            {!data?.posts ? 
-            (<div>Loading posts...</div>) : 
-            (<Stack spacing={8} direction='column'>
-                {data.posts.map(post => {
-                    const actualPost = post as RegularPostFragment;
-                    return (
-                        <Box key={actualPost.id} p={5} shadow='md' borderWidth='1px'>
-                            <Heading fontSize='xl'>{actualPost.title}</Heading>
-                            <Text mt={4}>{actualPost.text.slice(0, 50)}</Text>
-                        </Box>
-                    )
-                })}
-            </Stack>)}
+            {!data && fetching ? 
+                (<div>Loading posts...</div>) : 
+                (<Stack spacing={8} direction='column'>
+                    {data?.posts?.map(post => {
+                        const actualPost = post as RegularPostFragment;
+                        return (
+                            <Box key={actualPost.id} p={5} shadow='md' borderWidth='1px'>
+                                <Heading fontSize='xl'>{actualPost.title}</Heading>
+                                <Text mt={4}>{actualPost.textSnippet}</Text>
+                            </Box>
+                        )
+                    })}
+                </Stack>)
+            }
+            {data ? (
+                <Flex>
+                    <Button isLoading={fetching} m="auto" my={8}>load more</Button>
+                </Flex>
+            ) : null}
         </Layout>
     )
 }
