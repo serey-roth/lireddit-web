@@ -5,17 +5,29 @@ import Layout from "../components/Layout";
 import { PostsDocument, RegularPostFragment } from "../gql/graphql";
 import { createUrqlClient } from "../util/createUrqlClient";
 import NextLink from "next/link";
+import { useState } from "react";
 
 const Index = () => {
+    const [variables, setVariables] = useState({
+        limit: 10,
+        cursor: null as null | string,
+    })
     const [{ data, fetching }] = useQuery({ 
         query: PostsDocument,
-        variables: {
-            limit: 10
-        }
+        variables
     });
 
     if (!fetching && !data) {
         return <div>query failed for some reason</div>
+    }
+
+    const handleLoadMore = () => {
+        if (data && data.posts) {
+            setVariables({
+                limit: variables.limit,
+                cursor: (data.posts[data.posts.length - 1] as RegularPostFragment).createdAt
+            });
+        }
     }
 
     return (
@@ -41,7 +53,12 @@ const Index = () => {
             }
             {data ? (
                 <Flex>
-                    <Button isLoading={fetching} m="auto" my={8}>load more</Button>
+                    <Button 
+                    isLoading={fetching} 
+                    m="auto"
+                    my={8}
+                    onClick={handleLoadMore}>
+                        load more</Button>
                 </Flex>
             ) : null}
         </Layout>
