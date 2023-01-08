@@ -6,6 +6,7 @@ import { PostsDocument, RegularPostFragment } from "../gql/graphql";
 import { createUrqlClient } from "../util/createUrqlClient";
 import NextLink from "next/link";
 import { useState } from "react";
+import { UpdootSection } from "../components/UpdootSection";
 
 const Index = () => {
     const [variables, setVariables] = useState({
@@ -43,11 +44,14 @@ const Index = () => {
                     {data?.posts?.posts.map(post => {
                         const actualPost = post as RegularPostFragment;
                         return (
-                            <Box key={actualPost.id} p={5} shadow='md' borderWidth='1px'>
-                                <Heading fontSize='xl'>{actualPost.title}</Heading>
-                                <Text>posted by {actualPost.creator.username}</Text>
-                                <Text mt={4}>{actualPost.textSnippet}</Text>
-                            </Box>
+                            <Flex key={actualPost.id} p={5} shadow='md' borderWidth='1px'>
+                                <UpdootSection postId={actualPost.id} points={actualPost.points} />
+                                <Box>
+                                    <Heading fontSize='xl'>{actualPost.title}</Heading>
+                                    <Text>posted by {actualPost.creator.username}</Text>
+                                    <Text mt={4}>{actualPost.textSnippet}</Text>
+                                </Box>
+                            </Flex>
                         )
                     })}
                 </Stack>)
