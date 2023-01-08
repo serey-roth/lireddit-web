@@ -14,11 +14,11 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "fragment RegularError on FieldError {\n  field\n  message\n}": types.RegularErrorFragmentDoc,
-    "fragment RegularPost on Post {\n  id\n  title\n  createdAt\n  updatedAt\n  text\n  points\n  creatorId\n  textSnippet\n}": types.RegularPostFragmentDoc,
+    "fragment RegularPost on Post {\n  id\n  title\n  createdAt\n  updatedAt\n  text\n  points\n  creatorId\n  textSnippet\n  creator {\n    id\n    username\n  }\n}": types.RegularPostFragmentDoc,
     "fragment RegularUser on User {\n  id\n  username\n}": types.RegularUserFragmentDoc,
     "fragment RegularUserResponse on UserResponse {\n  errors {\n    ...RegularError\n  }\n  user {\n    ...RegularUser\n  }\n}": types.RegularUserResponseFragmentDoc,
     "mutation ChangePassword($token: String!, $newPassword: String!) {\n  changePassword(token: $token, newPassword: $newPassword) {\n    ...RegularUserResponse\n  }\n}": types.ChangePasswordDocument,
-    "mutation CreatePost($input: PostInput!) {\n  createPost(input: $input) {\n    ...RegularPost\n  }\n}": types.CreatePostDocument,
+    "mutation CreatePost($input: PostInput!) {\n  createPost(input: $input) {\n    id\n    title\n    createdAt\n    updatedAt\n    text\n    points\n    creatorId\n    textSnippet\n  }\n}": types.CreatePostDocument,
     "mutation ForgetPassword($email: String!) {\n  forgetPassword(email: $email)\n}": types.ForgetPasswordDocument,
     "mutation Login($usernameOrEmail: String!, $password: String!) {\n  login(usernameOrEmail: $usernameOrEmail, password: $password) {\n    ...RegularUserResponse\n  }\n}": types.LoginDocument,
     "mutation Logout {\n  logout\n}": types.LogoutDocument,
@@ -34,7 +34,7 @@ export function graphql(source: "fragment RegularError on FieldError {\n  field\
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "fragment RegularPost on Post {\n  id\n  title\n  createdAt\n  updatedAt\n  text\n  points\n  creatorId\n  textSnippet\n}"): (typeof documents)["fragment RegularPost on Post {\n  id\n  title\n  createdAt\n  updatedAt\n  text\n  points\n  creatorId\n  textSnippet\n}"];
+export function graphql(source: "fragment RegularPost on Post {\n  id\n  title\n  createdAt\n  updatedAt\n  text\n  points\n  creatorId\n  textSnippet\n  creator {\n    id\n    username\n  }\n}"): (typeof documents)["fragment RegularPost on Post {\n  id\n  title\n  createdAt\n  updatedAt\n  text\n  points\n  creatorId\n  textSnippet\n  creator {\n    id\n    username\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -50,7 +50,7 @@ export function graphql(source: "mutation ChangePassword($token: String!, $newPa
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "mutation CreatePost($input: PostInput!) {\n  createPost(input: $input) {\n    ...RegularPost\n  }\n}"): (typeof documents)["mutation CreatePost($input: PostInput!) {\n  createPost(input: $input) {\n    ...RegularPost\n  }\n}"];
+export function graphql(source: "mutation CreatePost($input: PostInput!) {\n  createPost(input: $input) {\n    id\n    title\n    createdAt\n    updatedAt\n    text\n    points\n    creatorId\n    textSnippet\n  }\n}"): (typeof documents)["mutation CreatePost($input: PostInput!) {\n  createPost(input: $input) {\n    id\n    title\n    createdAt\n    updatedAt\n    text\n    points\n    creatorId\n    textSnippet\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
