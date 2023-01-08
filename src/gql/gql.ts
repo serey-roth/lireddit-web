@@ -14,7 +14,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "fragment RegularError on FieldError {\n  field\n  message\n}": types.RegularErrorFragmentDoc,
-    "fragment RegularPost on Post {\n  id\n  title\n  createdAt\n  updatedAt\n  text\n  points\n  creatorId\n  textSnippet\n  creator {\n    id\n    username\n  }\n}": types.RegularPostFragmentDoc,
+    "fragment RegularPost on Post {\n  id\n  title\n  createdAt\n  updatedAt\n  text\n  points\n  creatorId\n  textSnippet\n  voteStatus\n  creator {\n    id\n    username\n  }\n}": types.RegularPostFragmentDoc,
     "fragment RegularUser on User {\n  id\n  username\n}": types.RegularUserFragmentDoc,
     "fragment RegularUserResponse on UserResponse {\n  errors {\n    ...RegularError\n  }\n  user {\n    ...RegularUser\n  }\n}": types.RegularUserResponseFragmentDoc,
     "mutation ChangePassword($token: String!, $newPassword: String!) {\n  changePassword(token: $token, newPassword: $newPassword) {\n    ...RegularUserResponse\n  }\n}": types.ChangePasswordDocument,
@@ -35,7 +35,7 @@ export function graphql(source: "fragment RegularError on FieldError {\n  field\
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "fragment RegularPost on Post {\n  id\n  title\n  createdAt\n  updatedAt\n  text\n  points\n  creatorId\n  textSnippet\n  creator {\n    id\n    username\n  }\n}"): (typeof documents)["fragment RegularPost on Post {\n  id\n  title\n  createdAt\n  updatedAt\n  text\n  points\n  creatorId\n  textSnippet\n  creator {\n    id\n    username\n  }\n}"];
+export function graphql(source: "fragment RegularPost on Post {\n  id\n  title\n  createdAt\n  updatedAt\n  text\n  points\n  creatorId\n  textSnippet\n  voteStatus\n  creator {\n    id\n    username\n  }\n}"): (typeof documents)["fragment RegularPost on Post {\n  id\n  title\n  createdAt\n  updatedAt\n  text\n  points\n  creatorId\n  textSnippet\n  voteStatus\n  creator {\n    id\n    username\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
