@@ -9,7 +9,7 @@ import { useState } from "react";
 
 const Index = () => {
     const [variables, setVariables] = useState({
-        limit: 10,
+        limit: 15,
         cursor: null as null | string,
     })
     const [{ data, fetching }] = useQuery({ 
@@ -45,6 +45,7 @@ const Index = () => {
                         return (
                             <Box key={actualPost.id} p={5} shadow='md' borderWidth='1px'>
                                 <Heading fontSize='xl'>{actualPost.title}</Heading>
+                                <Text>posted by {actualPost.creator.username}</Text>
                                 <Text mt={4}>{actualPost.textSnippet}</Text>
                             </Box>
                         )
