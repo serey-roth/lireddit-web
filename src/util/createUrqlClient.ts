@@ -30,17 +30,31 @@ export const cursorPagination = (): Resolver => {
 
         //check if data is in the cache
         const fieldKey = `${fieldName}(${stringifyVariables(fieldArgs)})`; //e.g looks like posts({ limit: 10 })
-        const isItInTheCache = cache.resolve(entityKey, fieldKey);
+        const isItInTheCache = cache.resolve(
+            cache.resolve(entityKey, fieldKey) as string,
+            "posts"
+        );
         info.partial = !isItInTheCache; //if not in the cache, fetch new data
         //as we paginate, we combine all the data in the cache and
         //store in results
         let results: string[] = [];
+        let hasMore = true;
         fieldInfos.forEach(fi => {
-            const data = cache.resolve(entityKey, fi.fieldKey) as string[];
+            const key = cache.resolve(entityKey, fi.fieldKey) as string; //get the query key
+            //resolve each field because they are nested 
+            const data = cache.resolve(key, "posts") as string[];
+            const _hasMore = cache.resolve(key, "hasMore");
+            if (!_hasMore) {
+                hasMore = !!_hasMore;
+            }
             results.push(...data);
         })
 
-        return results;
+        return {
+            __typename: "PaginatedPosts", //solve InvalidResolverValue error
+            hasMore,
+            posts: results,
+        };
  /*     const visited = new Set();
         let result: NullArray<string> = [];
         let prevOffset: number | null = null;
@@ -104,6 +118,9 @@ export const createUrqlClient = (ssrExchange: any) => ({
     exchanges: [
         dedupExchange, 
         cacheExchange({
+        keys: {
+            PaginatedPosts: () => null, //no id to solve InvalidKey error
+        },
         //add resolvers on client-side
         resolvers: {
             Query: {
