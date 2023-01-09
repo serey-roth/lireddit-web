@@ -2,10 +2,10 @@ import { ChevronUpIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { Flex, IconButton } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useMutation } from "urql";
-import { RegularPostFragment, VoteDocument } from "../gql/graphql";
+import { Post, VoteDocument } from "../gql/graphql";
 
 interface UpdootSectionProps {
-    post: RegularPostFragment; //select subtype in another type
+    post: Post; //select subtype in another type
 }
 
 type LoadingState = "updoot-loading" | "downdoot-loading" | "not-loading";
