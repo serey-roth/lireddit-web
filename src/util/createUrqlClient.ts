@@ -1,4 +1,4 @@
-import { cacheExchange, Resolver } from "@urql/exchange-graphcache";
+import { cacheExchange, Resolver, Cache } from "@urql/exchange-graphcache";
 import { dedupExchange, Exchange, fetchExchange, gql, stringifyVariables } from "urql";
 import { pipe, tap } from "wonka";
 import { DeletePostMutationVariables, LoginMutation, LogoutMutation, MeDocument, MeQuery, RegisterMutation, RegularUserResponseFragment, VoteMutationVariables } from "../gql/graphql";
@@ -59,6 +59,17 @@ export const cursorPagination = (): Resolver => {
     };
 };
 
+const invalidateAllPosts = (cache: Cache) => {
+    const allFields = cache.inspectFields("Query");
+    const fieldInfos = allFields.filter((info) => info.fieldName === "posts");
+    fieldInfos.forEach((fi) => {
+        //createPost add post to our database
+        //then invalidate the first posts query in
+        //the cache so that browser can refetch data from the
+        //server
+        cache.invalidate("Query", "posts", fi.arguments);
+    });
+};
 // create urql client with next-urql for optional server rendering of select pages
 export const createUrqlClient = (ssrExchange: any, ctx: any) => {
     let cookie = '';
@@ -110,7 +121,8 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
                                 }
                             }
                         }
-                    )
+                    );
+                    invalidateAllPosts(cache);//reset the cache to fetch new data
                 },
                 register: (_result, args, cache, info) => {
                     betterUpdateQuery<RegisterMutation, MeQuery>(cache,
@@ -125,19 +137,15 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
                                 }
                             }
                         }
-                    )
+                    );
+                    invalidateAllPosts(cache);
                 },
                 createPost: (_result, args, cache, info) => {
-                    const allFields = cache.inspectFields('Query');
-                    const fieldInfos = allFields.filter(info => info.fieldName === "posts");
-                    fieldInfos.forEach(fi => {
-                        //createPost add post to our database
-                        //then invalidate the first posts query in
-                        //the cache so that browser can refetch data from the
-                        //server
-                        cache.invalidate('Query', 'posts', fi.arguments);
-                    })
-                },
+                    invalidateAllPosts(cache);
+                },/* 
+                updatePost: (_result, args, cache, info) => {
+                    //invalidateAllPosts(cache);
+                }, */
                 vote: (_result, args, cache, info) => {
                     const { postId, value } = args as VoteMutationVariables;
                     const data = cache.readFragment(
