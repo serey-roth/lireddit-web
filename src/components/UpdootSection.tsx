@@ -5,41 +5,40 @@ import { useMutation } from "urql";
 import { RegularPostFragment, VoteDocument } from "../gql/graphql";
 
 interface UpdootSectionProps {
-    postId: RegularPostFragment["id"];
-    points: RegularPostFragment["points"]; //select subtype in another type
+    post: RegularPostFragment; //select subtype in another type
 }
 
 type LoadingState = "updoot-loading" | "downdoot-loading" | "not-loading";
 
-export const UpdootSection: React.FC<UpdootSectionProps> = ({ postId, points }) => {
+export const UpdootSection: React.FC<UpdootSectionProps> = ({ post }) => {
     const [loadingState, setLoadingState] = useState<LoadingState>("not-loading")
-    const [{ fetching, operation }, vote] = useMutation(VoteDocument);
+    const [, vote] = useMutation(VoteDocument);
     
     const handleUpdoot = async () => {
         setLoadingState("updoot-loading");
-        await vote({ postId, value: 1 });
+        await vote({ postId: post.id, value: 1 });
         setLoadingState("not-loading");
     };
 
     const handleDowndoot = () => {
         setLoadingState("downdoot-loading");
-        vote({ postId, value: -1 });
+        vote({ postId: post.id, value: -1 });
         setLoadingState("not-loading");
     };
 
     return (
         <Flex direction="column" alignItems="center" justifyContent="center" mr={4}>
         <IconButton
-            variant="ghost"
+            colorScheme={post.voteStatus === 1 ? 'green' : undefined}
             size="sm"
             aria-label="Updoot post"
             isLoading={loadingState === "updoot-loading"}
             icon={<ChevronUpIcon boxSize={8} />}
             onClick={handleUpdoot}
         />
-        {points}
+        {post.points}
         <IconButton
-            variant="ghost"
+            colorScheme={post.voteStatus === -1 ? 'red' : undefined}
             size="sm"
             aria-label="Downdoot post"
             isLoading={loadingState === "downdoot-loading"}
