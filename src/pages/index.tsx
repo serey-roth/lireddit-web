@@ -45,7 +45,7 @@ const Index = () => {
                         const actualPost = post as RegularPostFragment;
                         return (
                             <Flex key={actualPost.id} p={5} shadow='md' borderWidth='1px'>
-                                <UpdootSection postId={actualPost.id} points={actualPost.points} />
+                                <UpdootSection post={actualPost} />
                                 <Box>
                                     <Heading fontSize='xl'>{actualPost.title}</Heading>
                                     <Text>posted by {actualPost.creator.username}</Text>
