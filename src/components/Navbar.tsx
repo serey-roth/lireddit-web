@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Link } from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, Link } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react'
 import NextLink from 'next/link';
 import { useMutation, useQuery } from 'urql';
@@ -6,13 +6,13 @@ import { LogoutDocument, MeDocument, RegularUserFragment } from '../gql/graphql'
 import { isServer } from '../util/isServer';
 
 interface NavbarProps {
-
+    home?: boolean;
 }
 
 // when Index is server-side rendered, Navbar makes a Me query 
 // on the next.js server but the next.js server doesn't have the cookie
 // so return { me: null }
-export const Navbar: React.FC<NavbarProps> = ({}) => {
+export const Navbar: React.FC<NavbarProps> = ({home=false}) => {
     const [{ data, fetching }] = useQuery({ 
         query : MeDocument,
         pause: isServer(), //don't query on server -> make query client-side on browser
@@ -49,7 +49,12 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
     }, [fetching, data]);
 
     return (
-        <Flex position='sticky' top={0} zIndex={1} bg='tan' p={4}>
+        <Flex position='sticky' top={0} zIndex={1} bg='tan' alignItems='center' p={4}>
+            {!home && <Box>
+                <Link as={NextLink} href='/'>
+                    <Heading>LiReddit</Heading>
+                </Link>
+            </Box>}
             <Box ml='auto'>
                 {body}
             </Box>
