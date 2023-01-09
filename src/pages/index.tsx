@@ -3,7 +3,6 @@ import {
   Button,
   Flex,
   Heading,
-  IconButton,
   Link,
   Stack,
   Text,
@@ -11,22 +10,24 @@ import {
 import { withUrqlClient } from "next-urql";
 import { useMutation, useQuery } from "urql";
 import Layout from "../components/Layout";
-import { DeletePostDocument, Post, PostsDocument } from "../gql/graphql";
+import { DeletePostDocument, MeDocument, Post, PostsDocument, User } from "../gql/graphql";
 import { createUrqlClient } from "../util/createUrqlClient";
 import NextLink from "next/link";
 import { useState } from "react";
 import { UpdootSection } from "../components/UpdootSection";
-import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
+import EditDeletePostButtons from "../components/EditDeletePostButtons";
 
 const Index = () => {
     const [variables, setVariables] = useState({
-        limit: 15,
+        limit: 5,
         cursor: null as null | string,
     });
+    const [{ data: meData }] = useQuery({ query: MeDocument });
     const [{ data, fetching }] = useQuery({
         query: PostsDocument,
         variables,
     });
+
     const [, deletePost] = useMutation(DeletePostDocument);
 
     if (!fetching && !data) {
@@ -72,12 +73,13 @@ const Index = () => {
                     <Text>posted by {actualPost.creator.username}</Text>
                     <Flex alignItems='center'>
                         <Text flex={1} mt={4}>{actualPost.textSnippet}</Text>
-                        <IconButton
-                        colorScheme='red'
-                        aria-label="Delete post"
-                        icon={<DeleteIcon boxSize={5} />}
-                        onClick={() => handleDeletePost(actualPost.id)}
-                        />
+                        {(meData?.me as User)?.id === actualPost.creatorId && (
+                            <Box ml='auto'>
+                                <EditDeletePostButtons 
+                                id={actualPost.id} 
+                                onDelete={handleDeletePost} />
+                            </Box>
+                        )}
                     </Flex>
                     </Box>
                 </Flex>
