@@ -24,7 +24,7 @@ const documents = {
     "mutation Login($usernameOrEmail: String!, $password: String!) {\n  login(usernameOrEmail: $usernameOrEmail, password: $password) {\n    ...RegularUserResponse\n  }\n}": types.LoginDocument,
     "mutation Logout {\n  logout\n}": types.LogoutDocument,
     "mutation Register($options: UsernamePasswordInput!) {\n  register(options: $options) {\n    ...RegularUserResponse\n  }\n}": types.RegisterDocument,
-    "mutation UpdatePost($id: Int!, $title: String) {\n  updatePost(id: $id, title: $title) {\n    ...RegularPost\n  }\n}": types.UpdatePostDocument,
+    "mutation UpdatePost($id: Int!, $title: String!, $text: String!) {\n  updatePost(id: $id, title: $title, text: $text) {\n    id\n    creatorId\n    title\n    text\n  }\n}": types.UpdatePostDocument,
     "mutation Vote($postId: Int!, $value: Int!) {\n  vote(postId: $postId, value: $value)\n}": types.VoteDocument,
     "query Me {\n  me {\n    ...RegularUser\n  }\n}": types.MeDocument,
     "query Post($id: Int!) {\n  post(id: $id) {\n    ...RegularPost\n  }\n}": types.PostDocument,
@@ -78,7 +78,7 @@ export function graphql(source: "mutation Register($options: UsernamePasswordInp
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "mutation UpdatePost($id: Int!, $title: String) {\n  updatePost(id: $id, title: $title) {\n    ...RegularPost\n  }\n}"): (typeof documents)["mutation UpdatePost($id: Int!, $title: String) {\n  updatePost(id: $id, title: $title) {\n    ...RegularPost\n  }\n}"];
+export function graphql(source: "mutation UpdatePost($id: Int!, $title: String!, $text: String!) {\n  updatePost(id: $id, title: $title, text: $text) {\n    id\n    creatorId\n    title\n    text\n  }\n}"): (typeof documents)["mutation UpdatePost($id: Int!, $title: String!, $text: String!) {\n  updatePost(id: $id, title: $title, text: $text) {\n    id\n    creatorId\n    title\n    text\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
