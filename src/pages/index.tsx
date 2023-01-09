@@ -2,7 +2,7 @@ import { Box, Button, Flex, Heading, Link, Stack, Text } from "@chakra-ui/react"
 import { withUrqlClient } from "next-urql"
 import { useQuery } from "urql";
 import Layout from "../components/Layout";
-import { PostsDocument, RegularPostFragment } from "../gql/graphql";
+import { Post, PostsDocument } from "../gql/graphql";
 import { createUrqlClient } from "../util/createUrqlClient";
 import NextLink from "next/link";
 import { useState } from "react";
@@ -26,28 +26,30 @@ const Index = () => {
         if (data && data.posts) {
             setVariables({
                 limit: variables.limit,
-                cursor: (data.posts.posts[data.posts.posts.length - 1] as RegularPostFragment).createdAt
+                cursor: (data.posts.posts[data.posts.posts.length - 1] as Post).createdAt
             });
         }
     }
 
     return (
-        <Layout>
+        <Layout home>
             <Flex alignItems='center'>
                 <Heading>LiReddit</Heading>
-                <Link as={NextLink} href='/create-post' ml="auto">Create post</Link>
+                <Button as={NextLink} href='/create-post' ml='auto'>Create Post</Button>
             </Flex>
             <br />
             {!data && fetching ? 
                 (<div>Loading posts...</div>) : 
                 (<Stack spacing={8} direction='column'>
                     {data?.posts?.posts.map(post => {
-                        const actualPost = post as RegularPostFragment;
+                        const actualPost = post as Post;
                         return (
                             <Flex key={actualPost.id} p={5} shadow='md' borderWidth='1px'>
                                 <UpdootSection post={actualPost} />
                                 <Box>
-                                    <Heading fontSize='xl'>{actualPost.title}</Heading>
+                                    <Link as={NextLink} href={`/post/${actualPost.id}]`}>
+                                        <Heading fontSize='xl'>{actualPost.title}</Heading>
+                                    </Link>
                                     <Text>posted by {actualPost.creator.username}</Text>
                                     <Text mt={4}>{actualPost.textSnippet}</Text>
                                 </Box>
