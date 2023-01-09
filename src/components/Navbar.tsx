@@ -4,6 +4,7 @@ import NextLink from 'next/link';
 import { useMutation, useQuery } from 'urql';
 import { LogoutDocument, MeDocument, RegularUserFragment } from '../gql/graphql';
 import { isServer } from '../util/isServer';
+import { useRouter } from 'next/router';
 
 interface NavbarProps {
     home?: boolean;
@@ -13,6 +14,7 @@ interface NavbarProps {
 // on the next.js server but the next.js server doesn't have the cookie
 // so return { me: null }
 export const Navbar: React.FC<NavbarProps> = ({home=false}) => {
+    const router = useRouter();
     const [{ data, fetching }] = useQuery({ 
         query : MeDocument,
         pause: isServer(), //don't query on server -> make query client-side on browser
@@ -40,8 +42,9 @@ export const Navbar: React.FC<NavbarProps> = ({home=false}) => {
                     <Button 
                         variant='link'
                         isLoading={logoutFetching}
-                        onClick={() => {
-                            logout({});
+                        onClick={async () => {
+                            await logout({});
+                            router.reload(); //reset the cache by reloading the page
                         }}>logout</Button>
                 </Flex>
             );
