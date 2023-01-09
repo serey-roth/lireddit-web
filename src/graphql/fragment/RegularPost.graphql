@@ -6,7 +6,6 @@ fragment RegularPost on Post {
     text
     points
     creatorId
-    textSnippet
     voteStatus
     creator {
         id
