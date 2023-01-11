@@ -74,11 +74,11 @@ const invalidateAllPosts = (cache: Cache) => {
 export const createUrqlClient = (ssrExchange: any, ctx: any) => {
     let cookie = '';
     if (isServer()) {
-        cookie = ctx.req.headers.cookie; // when server side rendering, browser sends cookie to next.js so we move to forward it our graphql api
+        cookie = ctx?.req?.headers?.cookie; // when server side rendering, browser sends cookie to next.js so we move to forward it our graphql api
     }
 
     return {
-    url: 'http://localhost:4040/graphql',
+    url: process.env.NEXT_PUBLIC_API_URL as string,
     fetchOptions: {
         credentials: 'include' as const,
         headers: cookie ? {
