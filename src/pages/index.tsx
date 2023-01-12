@@ -16,6 +16,7 @@ import NextLink from "next/link";
 import { useState } from "react";
 import { UpdootSection } from "../components/UpdootSection";
 import EditDeletePostButtons from "../components/EditDeletePostButtons";
+import React from "react";
 
 const Index = () => {
     const [variables, setVariables] = useState({
